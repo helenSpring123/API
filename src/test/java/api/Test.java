@@ -94,10 +94,86 @@ public class Test {
         Assert.assertEquals(200, statusCode);
 
         List<String> listOfEmails = response.jsonPath().getList("responses.email");
-        for(String emails: listOfEmails){
+        for(String emails : listOfEmails){
             Assert.assertFalse(emails.isEmpty());
         }
 
 
     }
+
+    @org.junit.Test
+    public void createSeller() {
+        String url = Config.getProperties("cashwiseurl") + "/api/myaccount/sellers";
+        String token = CashWiseToken.getToken();
+
+        Requestbody requestbody = new Requestbody();
+        requestbody.setCompany_name("WiseCode");
+        requestbody.setSeller_name("Nurghazy");
+        requestbody.setAddress("Earth");
+        requestbody.setEmail("Wisecode.gmail.com");
+        requestbody.setPhone_number("465746895");
+
+        Response response = RestAssured.given().auth().oauth2(token).contentType(ContentType.JSON).body(requestbody).post(url);
+
+        response.statusCode();
+
+        int statusCode = response.statusCode();
+
+        Assert.assertEquals(201, statusCode);
+
+
+    }
+
+    @org.junit.Test
+    public void CreateGetSeller(){
+
+        String url = Config.getProperties("cashwiseurl") + "/api/myaccount/sellers";
+        String token = CashWiseToken.getToken();
+
+
+        Requestbody requestbody =new Requestbody();
+        requestbody.setCompany_name("J&H");
+        requestbody.setSeller_name("Helen");
+        requestbody.setAddress("Earth");
+        requestbody.setEmail("Helen22@Gmail.com");
+        requestbody.setPhone_number("314567890");
+
+        Response response = RestAssured.given().auth().oauth2(token).contentType(ContentType.JSON).body(requestbody).post(url);
+
+        int status = response.statusCode();
+
+        Assert.assertEquals(201, status);
+
+        //get the seller by id
+
+       String id = response.jsonPath().getString("seller_id");
+       String url2 = Config.getProperties("cashwiseurl") + "/api/myaccount/sellers/" + id;
+
+       Response response1 = RestAssured.given().auth().oauth2(token).get(url2);
+
+       int status2 = response1.statusCode();
+
+       Assert.assertEquals(200, status2);
+
+
+
+    }
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+

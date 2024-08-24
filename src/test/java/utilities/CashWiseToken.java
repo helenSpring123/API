@@ -17,6 +17,7 @@ public class CashWiseToken {
 
         Response response = RestAssured.given().contentType(ContentType.JSON)
                 .body(requestbody).post(endPoint);
+
         return response.jsonPath().getString("jwt_token");
     }
 }
